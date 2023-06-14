@@ -5,6 +5,7 @@ import com.blogapp.exceptions.ResourceNotFoundException;
 import com.blogapp.payloads.UserDto;
 import com.blogapp.repositories.UserRepository;
 import com.blogapp.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,26 +18,31 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
 
 
     private User dtoToEntity(UserDto userDto) {
-        User user = new User();
-        user.setId(userDto.getId());
-        user.setAbout(userDto.getAbout());
-        user.setEmail(userDto.getEmail());
-        user.setName(userDto.getName());
-        user.setPassword(userDto.getPassword());
+        User user = modelMapper.map(userDto , User.class);
+//        User user = new User();
+//        user.setId(userDto.getId());
+//        user.setAbout(userDto.getAbout());
+//        user.setEmail(userDto.getEmail());
+//        user.setName(userDto.getName());
+//        user.setPassword(userDto.getPassword());
 
         return user;
     }
 
     private UserDto entityToDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setAbout(user.getAbout());
-        userDto.setEmail(user.getEmail());
-        userDto.setName(user.getName());
-        userDto.setPassword(user.getPassword());
+        UserDto userDto = modelMapper.map(user , UserDto.class);
+//        UserDto userDto = new UserDto();
+//        userDto.setId(user.getId());
+//        userDto.setAbout(user.getAbout());
+//        userDto.setEmail(user.getEmail());
+//        userDto.setName(user.getName());
+//        userDto.setPassword(user.getPassword());
 
         return userDto;
     }
