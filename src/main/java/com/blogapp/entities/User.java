@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -20,4 +21,7 @@ public class User {
     private String email;
     private String password;
     private String about;
+
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+    private List<Post> postList;
 }

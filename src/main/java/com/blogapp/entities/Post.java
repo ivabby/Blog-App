@@ -1,25 +1,31 @@
 package com.blogapp.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Category {
+@AllArgsConstructor
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String title;
-    private String description;
+    private String content;
+    private String imageName;
+    private Date createdDate;
 
-    @OneToMany(mappedBy = "category" , cascade = CascadeType.ALL)
-    private List<Post> postList = new ArrayList<>();
+    @ManyToOne
+    private Category category;
+
+    @ManyToOne
+    private User user;
 }
