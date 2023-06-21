@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -31,10 +32,11 @@ public class PostServiceImpl implements PostService {
     private CategoryRepository categoryRepository;
 
     private PostDto postToDto(Post post) {
-        return modelMapper.map(post , PostDto.class);
+        return modelMapper.map(post, PostDto.class);
     }
+
     private Post dtoToPost(PostDto postDto) {
-        return modelMapper.map(postDto , Post.class);
+        return modelMapper.map(postDto, Post.class);
     }
 
 
@@ -65,7 +67,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getAllPost() {
-        return null;
+        List<Post> postList = postRepository.findAll();
+        return postList.stream().map(post -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -75,11 +78,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getPostByCategory(Integer categoryId) {
-        return null;
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
+        List<Post> postList = postRepository.findByCategory(category);
+        return postList.stream().map(post -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<PostDto> getPostByUser(Integer userId) {
-        return null;
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+        List<Post> postList = postRepository.findByUser(user);
+        return postList.stream().map(post -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
     }
 }
