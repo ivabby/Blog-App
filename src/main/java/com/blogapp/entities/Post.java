@@ -29,3 +29,6 @@ public class Post {
     @ManyToOne
     private User user;
 }
+
+// 1. Convert String to Date
+// 2. Convert Date to String without 'T'

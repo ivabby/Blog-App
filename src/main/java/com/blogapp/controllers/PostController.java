@@ -1,5 +1,6 @@
 package com.blogapp.controllers;
 
+import com.blogapp.payloads.ApiResponse;
 import com.blogapp.payloads.PostDto;
 import com.blogapp.services.PostService;
 import jakarta.validation.Valid;
@@ -41,5 +42,23 @@ public class PostController {
     public ResponseEntity<List<PostDto>> getAllPosts() {
         List<PostDto> postDtoList = postService.getAllPost();
         return new ResponseEntity<>(postDtoList , HttpStatus.OK);
+    }
+
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId) {
+        PostDto postDto = postService.getPostById(postId);
+        return new ResponseEntity<>(postDto , HttpStatus.FOUND);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponse> deletePostById(@PathVariable Integer postId) {
+        postService.deletePost(postId);
+        return new ResponseEntity(new ApiResponse("Post Deleted" , "true"), HttpStatus.OK);
+    }
+
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> updatePost(@PathVariable Integer postId,@RequestBody PostDto postDto) {
+        PostDto updatedPost = postService.updatePost(postDto , postId);
+        return new ResponseEntity<>(updatedPost , HttpStatus.OK);
     }
 }
