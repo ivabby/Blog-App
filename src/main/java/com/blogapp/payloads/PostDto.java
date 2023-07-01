@@ -16,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostDto {
+    private int id;
     @NotNull(message = "Title cannot be null")
     @NotEmpty(message = "Title cannot be empty")
     private String title;
