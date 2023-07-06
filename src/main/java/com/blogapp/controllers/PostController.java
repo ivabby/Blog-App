@@ -48,8 +48,10 @@ public class PostController {
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getAllPosts(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize) {
-        PostResponse postDtoList = postService.getAllPost(pageNumber, pageSize);
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy" , defaultValue = "id" , required = false) String sortBy,
+            @RequestParam(value = "sortOrder" , defaultValue = "asc" , required = false) String sortOrder) {
+        PostResponse postDtoList = postService.getAllPost(pageNumber, pageSize , sortBy, sortOrder);
         return new ResponseEntity<>(postDtoList, HttpStatus.OK);
     }
 

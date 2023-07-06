@@ -10,12 +10,12 @@ import com.blogapp.repositories.CategoryRepository;
 import com.blogapp.repositories.PostRepository;
 import com.blogapp.repositories.UserRepository;
 import com.blogapp.services.PostService;
-import com.blogapp.utils.PostHelper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -78,13 +78,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+
+        Sort sort = null;
+        if(sortOrder.equalsIgnoreCase("asc")) {
+            sort = Sort.by(sortBy).ascending();
+        } else {
+            sort = Sort.by(sortBy).descending();
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
         Page<Post> pagePost = postRepository.findAll(pageable);
         List<Post> postList = pagePost.getContent();
 
-        return preparePostResponse(pagePost , postList);
+        return preparePostResponse(pagePost, postList);
     }
 
     @Override
@@ -99,24 +107,24 @@ public class PostServiceImpl implements PostService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
-        Page<Post> pagePost = postRepository.findByCategory(category , pageable);
+        Page<Post> pagePost = postRepository.findByCategory(category, pageable);
         List<Post> postList = pagePost.getContent();
 
-        return preparePostResponse(pagePost , postList);
+        return preparePostResponse(pagePost, postList);
     }
 
     @Override
     public PostResponse getPostByUser(Integer userId, Integer pageNumber, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber , pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-        Page<Post> pagePost = postRepository.findByUser(user , pageable);
+        Page<Post> pagePost = postRepository.findByUser(user, pageable);
         List<Post> postList = pagePost.getContent();
 
-        return preparePostResponse(pagePost , postList);
+        return preparePostResponse(pagePost, postList);
     }
 
-    public PostResponse preparePostResponse(Page<Post> pagePost , List<Post> postList) {
+    public PostResponse preparePostResponse(Page<Post> pagePost, List<Post> postList) {
         PostResponse postResponse = new PostResponse();
         postResponse.setContent(postList.stream().map(post -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList()));
         postResponse.setPageNumber(pagePost.getNumber());
