@@ -20,4 +20,6 @@ public interface PostService {
     PostResponse getPostByCategory(Integer categoryId, Integer pageNumber, Integer pageSize);
 
     PostResponse getPostByUser(Integer userId, Integer pageNumber, Integer pageSize);
+
+    List<PostDto> searchPostsByTitle(String title);
 }

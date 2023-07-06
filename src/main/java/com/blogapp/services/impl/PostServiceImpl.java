@@ -124,6 +124,14 @@ public class PostServiceImpl implements PostService {
         return preparePostResponse(pagePost, postList);
     }
 
+    @Override
+    public List<PostDto> searchPostsByTitle(String title) {
+        List<Post> postList = postRepository.findByTitleContaining(title);
+        List<PostDto> postDtoList = postList.stream().map(post -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+
+        return postDtoList;
+    }
+
     public PostResponse preparePostResponse(Page<Post> pagePost, List<Post> postList) {
         PostResponse postResponse = new PostResponse();
         postResponse.setContent(postList.stream().map(post -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList()));
