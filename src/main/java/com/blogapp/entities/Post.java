@@ -1,19 +1,16 @@
 package com.blogapp.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +25,7 @@ public class Post {
 
     @ManyToOne
     private User user;
-}
 
-// 1. Convert String to Date
-// 2. Convert Date to String without 'T'
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private Set<Comment> comment = new HashSet<>();
+}
